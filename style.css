@@ -106,6 +106,7 @@ body::before {
 .arbin-modal-overlay.hidden {
     opacity: 0;
     pointer-events: none;
+    visibility: hidden;
 }
 
 .arbin-modal-glow {
@@ -116,6 +117,7 @@ body::before {
     background: radial-gradient(circle, rgba(0,242,254,0.15) 0%, transparent 70%);
     filter: blur(60px);
     animation: pulseGlow 4s ease-in-out infinite;
+    pointer-events: none;
 }
 
 @keyframes pulseGlow {
@@ -862,7 +864,6 @@ body::before {
     line-height: 1.55;
 }
 
-/* Thinking indicator */
 .thinking-dots {
     display: inline-flex;
     gap: 4px;
@@ -895,7 +896,6 @@ body::before {
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 0.65rem;
-    empty-cells: hide;
 }
 
 .attachments-preview:empty { display: none; }
@@ -1069,10 +1069,9 @@ body::before {
 }
 
 /* ==========================================================================
-   Sidebar Backdrop — MOBILE ONLY, hidden on desktop no matter what
+   Sidebar Backdrop — dynamically created by JS
    ========================================================================== */
 .arbin-sidebar-backdrop {
-    display: none;
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
@@ -1082,30 +1081,9 @@ body::before {
     pointer-events: none;
 }
 
-/* Backdrop only becomes interactive inside the mobile media query */
-@media screen and (max-width: 768px) {
-    .arbin-sidebar-backdrop.active {
-        display: block;
-        opacity: 1;
-        pointer-events: auto;
-    }
-}
-
-/* On desktop: hard-disable both the backdrop and the hamburger */
-@media screen and (min-width: 769px) {
-    .arbin-sidebar-backdrop,
-    .arbin-sidebar-backdrop.active {
-        display: none !important;
-        pointer-events: none !important;
-    }
-    .mobile-menu-toggle {
-        display: none !important;
-    }
-    .arbin-sidebar {
-        position: relative !important;
-        transform: none !important;
-        left: auto !important;
-    }
+.arbin-sidebar-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* ==========================================================================
@@ -1149,6 +1127,23 @@ body::before {
     .message-bubble-content { max-width: 85%; font-size: 0.9rem; }
     .arbin-modal-container { padding: 2.25rem 1.75rem 1.75rem; }
     .arbin-modal-title { font-size: 1.5rem; }
+}
+
+/* On desktop: never show hamburger or backdrop */
+@media screen and (min-width: 769px) {
+    .arbin-sidebar-backdrop,
+    .arbin-sidebar-backdrop.active {
+        display: none !important;
+        pointer-events: none !important;
+    }
+    .mobile-menu-toggle {
+        display: none !important;
+    }
+    .arbin-sidebar {
+        position: relative !important;
+        transform: none !important;
+        left: auto !important;
+    }
 }
 
 @media screen and (max-width: 420px) {
