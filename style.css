@@ -1,38 +1,51 @@
 /* ==========================================================================
-   Arbin AI Design System
-   Theme: Cyan (#00f2fe) & Deep Electric Blue (#4facfe) on Obsidian Dark (#05080f)
+   Arbin AI — Neural Core v2
+   Obsidian dark theme · cyan/blue plasma accents · glassmorphism
    ========================================================================== */
 
 :root {
-    --bg-obsidian: #05080f;
-    --bg-surface: #0a101d;
-    --bg-sidebar: #070c17;
-    --bg-card: #101828;
-    --bg-card-hover: #162238;
+    --bg-obsidian: #04060d;
+    --bg-surface: #070b14;
+    --bg-sidebar: #050912;
+    --bg-card: #0d1422;
+    --bg-card-hover: #131c30;
+    --bg-elevated: #0a1220;
 
     --accent-cyan: #00f2fe;
     --accent-blue: #4facfe;
-    --gradient-primary: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-    --gradient-glow: rgba(0, 242, 254, 0.15);
+    --accent-violet: #8b5cf6;
+    --gradient-primary: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #8b5cf6 100%);
+    --gradient-soft: linear-gradient(135deg, rgba(0,242,254,0.14) 0%, rgba(139,92,246,0.08) 100%);
 
-    --text-primary: #f8fafc;
+    --text-primary: #f1f5f9;
     --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    --text-muted: #475569;
 
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-active: rgba(0, 242, 254, 0.4);
+    --border-subtle: rgba(148, 163, 184, 0.09);
+    --border-medium: rgba(148, 163, 184, 0.16);
+    --border-active: rgba(0, 242, 254, 0.45);
 
-    --error-bg: rgba(244, 63, 94, 0.1);
-    --error-border: rgba(244, 63, 94, 0.4);
+    --error-bg: rgba(244, 63, 94, 0.08);
+    --error-border: rgba(244, 63, 94, 0.35);
     --error-text: #fda4af;
 
-    --sidebar-width: 280px;
-    --topbar-height: 64px;
-    --radius-lg: 16px;
-    --radius-md: 10px;
-    --radius-sm: 6px;
+    --success: #22c55e;
+    --warning: #f59e0b;
 
-    --font-sans: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    --sidebar-width: 280px;
+    --topbar-height: 68px;
+    --radius-xl: 20px;
+    --radius-lg: 14px;
+    --radius-md: 10px;
+    --radius-sm: 7px;
+
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', ui-monospace, Menlo, Consolas, monospace;
+
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+    --shadow-md: 0 8px 24px rgba(0,0,0,0.5);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.6);
+    --shadow-glow: 0 0 24px rgba(0,242,254,0.25);
 }
 
 *, *::before, *::after {
@@ -44,27 +57,50 @@
 html, body {
     width: 100%;
     height: 100vh;
+    height: 100dvh;
     background-color: var(--bg-obsidian);
     color: var(--text-primary);
     font-family: var(--font-sans);
     overflow: hidden;
     font-size: 14px;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===================== Modal ===================== */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 80% 60% at 20% 0%, rgba(0,242,254,0.06), transparent 60%),
+        radial-gradient(ellipse 70% 50% at 100% 100%, rgba(139,92,246,0.05), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================================
+   Welcome Modal
+   ========================================================================== */
 .arbin-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(3, 5, 10, 0.88);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(2, 4, 9, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
     opacity: 1;
-    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 1rem;
 }
 
 .arbin-modal-overlay.hidden {
@@ -72,87 +108,152 @@ html, body {
     pointer-events: none;
 }
 
+.arbin-modal-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,242,254,0.15) 0%, transparent 70%);
+    filter: blur(60px);
+    animation: pulseGlow 4s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.15); opacity: 1; }
+}
+
 .arbin-modal-container {
-    background: linear-gradient(145deg, #0d1526, #080d1a);
-    border: 1px solid var(--border-active);
-    border-radius: var(--radius-lg);
-    padding: 3rem 2.5rem;
-    max-width: 460px;
-    width: 90%;
+    position: relative;
+    background: linear-gradient(155deg, #0c1424 0%, #06090f 100%);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-xl);
+    padding: 3rem 2.5rem 2rem;
+    max-width: 470px;
+    width: 100%;
     text-align: center;
-    box-shadow: 0 0 50px rgba(0, 242, 254, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    transform: translateY(0);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.06), 0 0 60px rgba(0,242,254,0.1);
+    animation: modalIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .arbin-profile-badge {
-    width: 88px;
-    height: 88px;
+    position: relative;
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 1.75rem;
+}
+
+.arbin-profile-ring {
+    position: absolute;
+    inset: 0;
     border-radius: 50%;
-    background: var(--gradient-primary);
-    margin: 0 auto 1.75rem auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 25px rgba(0, 242, 254, 0.4);
-    border: 3px solid rgba(255, 255, 255, 0.9);
+    background: conic-gradient(from 0deg, #00f2fe, #4facfe, #8b5cf6, #00f2fe);
+    animation: rotateRing 8s linear infinite;
+    filter: blur(0.5px);
+}
+
+@keyframes rotateRing {
+    to { transform: rotate(360deg); }
+}
+
+.arbin-profile-badge::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background: var(--bg-obsidian);
 }
 
 .arbin-profile-text {
-    font-size: 1.8rem;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
     font-weight: 800;
-    color: var(--bg-obsidian);
-    letter-spacing: -0.5px;
-}
-
-.arbin-modal-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin-bottom: 0.85rem;
+    letter-spacing: -1px;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    letter-spacing: -0.3px;
+    z-index: 2;
+}
+
+.arbin-modal-title {
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin-bottom: 0.85rem;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
 }
 
 .arbin-modal-description {
     color: var(--text-secondary);
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: 0.98rem;
+    line-height: 1.65;
     margin-bottom: 2.25rem;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .arbin-modal-action-btn {
     background: var(--gradient-primary);
-    color: var(--bg-obsidian);
+    color: #04060d;
     border: none;
-    padding: 0.9rem 2.5rem;
+    padding: 0.95rem 2rem;
     font-size: 1rem;
     font-weight: 700;
+    font-family: var(--font-sans);
     border-radius: var(--radius-md);
     cursor: pointer;
-    box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3);
-    transition: all 0.2s ease;
+    box-shadow: 0 4px 24px rgba(0, 242, 254, 0.3);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    letter-spacing: 0.2px;
 }
 
 .arbin-modal-action-btn:hover {
-    opacity: 0.95;
     transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(0, 242, 254, 0.45);
+    box-shadow: 0 8px 32px rgba(0, 242, 254, 0.45);
 }
 
-/* ===================== Layout ===================== */
+.arbin-modal-action-btn:active { transform: translateY(0); }
+
+.arbin-modal-footer {
+    margin-top: 1.75rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   App Layout
+   ========================================================================== */
 .arbin-app-layout {
     display: flex;
     width: 100vw;
     height: 100vh;
-    background-color: var(--bg-obsidian);
+    height: 100dvh;
     position: relative;
+    z-index: 1;
 }
 
-/* ===================== Sidebar ===================== */
+/* ==========================================================================
+   Sidebar
+   ========================================================================== */
 .arbin-sidebar {
     width: var(--sidebar-width);
     background-color: var(--bg-sidebar);
@@ -160,70 +261,157 @@ html, body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    z-index: 10;
-    transition: transform 0.3s ease;
+    z-index: 20;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.25rem 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.brand-mark {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: var(--gradient-soft);
+    border: 1px solid var(--border-medium);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.brand-pulse {
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-primary);
+    opacity: 0.15;
+    animation: brandPulse 3s ease-in-out infinite;
+}
+
+@keyframes brandPulse {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.25; }
+}
+
+.brand-letter {
+    position: relative;
+    font-size: 1.1rem;
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.brand-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+}
+
+.brand-sub {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    font-family: var(--font-mono);
 }
 
 .arbin-sidebar-header {
-    padding: 1rem;
+    padding: 1rem 1rem 0.75rem;
 }
 
 .arbin-new-chat-btn {
     width: 100%;
-    background: transparent;
+    background: var(--gradient-soft);
     border: 1px solid var(--border-active);
     color: var(--accent-cyan);
     padding: 0.75rem 1rem;
     border-radius: var(--radius-md);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    font-family: var(--font-sans);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.55rem;
     transition: all 0.2s ease;
 }
 
 .arbin-new-chat-btn:hover {
-    background: rgba(0, 242, 254, 0.08);
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+    background: rgba(0, 242, 254, 0.12);
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+    transform: translateY(-1px);
 }
 
-.btn-icon {
-    font-size: 1.25rem;
-    line-height: 1;
+.arbin-new-chat-btn:active { transform: translateY(0); }
+
+.sidebar-section-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    padding: 0.75rem 1.25rem 0.5rem;
+    font-family: var(--font-mono);
 }
 
 .arbin-history-scroll-container {
     flex: 1;
     overflow-y: auto;
-    padding: 0.5rem 1rem;
+    padding: 0 0.75rem 0.75rem;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.25rem;
 }
 
-.arbin-history-scroll-container::-webkit-scrollbar {
-    width: 5px;
-}
-
+.arbin-history-scroll-container::-webkit-scrollbar { width: 5px; }
+.arbin-history-scroll-container::-webkit-scrollbar-track { background: transparent; }
 .arbin-history-scroll-container::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(148, 163, 184, 0.15);
     border-radius: 10px;
+}
+.arbin-history-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 242, 254, 0.35);
 }
 
 .history-item-pill {
-    padding: 0.75rem 1rem;
+    padding: 0.7rem 0.9rem;
     border-radius: var(--radius-sm);
     color: var(--text-secondary);
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     transition: all 0.15s ease;
     border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.history-item-pill::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    flex-shrink: 0;
+    transition: all 0.2s;
 }
 
 .history-item-pill:hover {
@@ -232,124 +420,206 @@ html, body {
 }
 
 .history-item-pill.active {
-    background-color: var(--bg-card);
-    color: var(--accent-cyan);
-    border-color: rgba(0, 242, 254, 0.2);
-    box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.05);
+    background: var(--gradient-soft);
+    color: var(--text-primary);
+    border-color: rgba(0, 242, 254, 0.25);
+}
+
+.history-item-pill.active::before {
+    background: var(--accent-cyan);
+    box-shadow: 0 0 8px var(--accent-cyan);
 }
 
 .arbin-sidebar-footer {
-    padding: 1rem;
+    padding: 0.85rem 1.25rem;
     border-top: 1px solid var(--border-subtle);
-    background: rgba(5, 8, 15, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
 }
 
-.system-status-indicator {
+.status-row {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
+    font-family: var(--font-mono);
 }
 
 .status-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #22c55e;
+    width: 7px;
+    height: 7px;
+    background-color: var(--text-muted);
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+    transition: all 0.3s;
 }
 
-/* ===================== Main Workspace ===================== */
+.status-dot.online {
+    background-color: var(--success);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
+    animation: pulseDot 2s ease-in-out infinite;
+}
+
+.status-dot.error {
+    background-color: #f43f5e;
+    box-shadow: 0 0 8px rgba(244, 63, 94, 0.7);
+}
+
+@keyframes pulseDot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.clear-all-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    padding: 0.35rem 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.15s;
+}
+
+.clear-all-btn:hover {
+    color: var(--error-text);
+    border-color: var(--error-border);
+    background: var(--error-bg);
+}
+
+/* ==========================================================================
+   Main Workspace
+   ========================================================================== */
 .arbin-main-workspace {
     flex: 1;
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: var(--bg-obsidian);
+    min-width: 0;
     position: relative;
     overflow: hidden;
 }
 
+/* ==========================================================================
+   Top Config Bar
+   ========================================================================== */
 .arbin-top-config-bar {
     min-height: var(--topbar-height);
-    padding: 0.75rem 1.75rem;
-    background-color: var(--bg-surface);
+    padding: 0.75rem 1.5rem;
+    background-color: rgba(7, 11, 20, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-subtle);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     gap: 0.75rem;
-    flex-wrap: wrap;
+    z-index: 5;
 }
 
 .config-input-wrapper {
     position: relative;
-    width: 100%;
-    max-width: 460px;
+    flex: 1;
+    min-width: 200px;
     display: flex;
     align-items: center;
-    flex: 1;
-    min-width: 220px;
+}
+
+.config-input-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--text-muted);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
 }
 
 .config-input-wrapper input {
     width: 100%;
-    padding: 0.65rem 1rem;
-    padding-right: 5rem;
+    padding: 0.7rem 5.25rem 0.7rem 2.35rem;
     background-color: var(--bg-obsidian);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
     color: var(--text-primary);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
     outline: none;
-    transition: all 0.2s ease;
+    transition: all 0.2s;
+}
+
+.config-input-wrapper input::placeholder {
+    color: var(--text-muted);
+    font-family: var(--font-sans);
 }
 
 .config-input-wrapper input:focus {
     border-color: var(--accent-cyan);
-    box-shadow: 0 0 12px rgba(0, 242, 254, 0.15);
+    box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.1), var(--shadow-glow);
 }
 
 .config-indicator-badge {
     position: absolute;
     right: 10px;
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     font-weight: 600;
-    padding: 0.2rem 0.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
+    padding: 0.25rem 0.55rem;
+    background: rgba(148, 163, 184, 0.08);
+    border-radius: 5px;
     color: var(--text-muted);
-    letter-spacing: 0.3px;
+    letter-spacing: 0.4px;
     pointer-events: none;
-    transition: all 0.2s;
+    transition: all 0.25s;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
 }
 
 .config-indicator-badge.linked {
-    background: rgba(0, 242, 254, 0.15);
+    background: rgba(0, 242, 254, 0.12);
     color: var(--accent-cyan);
     border: 1px solid rgba(0, 242, 254, 0.3);
 }
 
+.model-picker {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    flex-shrink: 0;
+}
+
 .model-select {
-    padding: 0.65rem 1rem;
+    padding: 0.7rem 1rem;
     background-color: var(--bg-obsidian);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
     color: var(--text-primary);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-family: var(--font-sans);
     outline: none;
     cursor: pointer;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    max-width: 260px;
-    min-width: 180px;
+    transition: all 0.2s;
+    max-width: 220px;
+    min-width: 140px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2394a3b8' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
 }
 
 .model-select:focus,
 .model-select:hover {
     border-color: var(--accent-cyan);
-    box-shadow: 0 0 12px rgba(0, 242, 254, 0.15);
+    box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.08);
+}
+
+.model-select option {
+    background: var(--bg-card);
+    color: var(--text-primary);
 }
 
 .refresh-models-btn {
@@ -363,44 +633,62 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: all 0.2s;
     flex-shrink: 0;
 }
 
 .refresh-models-btn:hover {
     border-color: var(--accent-cyan);
-    box-shadow: 0 0 12px rgba(0, 242, 254, 0.15);
+    box-shadow: 0 0 12px rgba(0, 242, 254, 0.2);
 }
 
 .refresh-models-btn.spinning svg {
     animation: spin 0.8s linear infinite;
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.mobile-menu-toggle {
+    display: none;
+    width: 38px;
+    height: 38px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--accent-cyan);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-/* ===================== Chat Scrollport ===================== */
+/* ==========================================================================
+   Chat Scrollport
+   ========================================================================== */
 .arbin-chat-scrollport {
     flex: 1;
     overflow-y: auto;
     padding: 2rem 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1.75rem;
+    gap: 1.5rem;
     align-items: center;
     scroll-behavior: smooth;
 }
 
-.arbin-chat-scrollport::-webkit-scrollbar {
-    width: 6px;
-}
-
+.arbin-chat-scrollport::-webkit-scrollbar { width: 8px; }
+.arbin-chat-scrollport::-webkit-scrollbar-track { background: transparent; }
 .arbin-chat-scrollport::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(148, 163, 184, 0.15);
     border-radius: 10px;
 }
+.arbin-chat-scrollport::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 242, 254, 0.3);
+}
 
+/* ==========================================================================
+   Welcome Hero
+   ========================================================================== */
 .arbin-welcome-hero {
     display: flex;
     flex-direction: column;
@@ -408,99 +696,160 @@ html, body {
     justify-content: center;
     height: 100%;
     text-align: center;
-    max-width: 600px;
+    max-width: 640px;
     padding: 2rem;
     animation: fadeIn 0.6s ease;
+    margin: auto 0;
 }
 
-.hero-logo-glow {
-    width: 72px;
-    height: 72px;
+.hero-orbit {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    margin-bottom: 1.75rem;
+}
+
+.orbit-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid transparent;
+    background: conic-gradient(from 0deg, #00f2fe, transparent 40%, #8b5cf6, transparent 70%, #00f2fe) border-box;
+    -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: rotateRing 4s linear infinite;
+}
+
+.orbit-core {
+    position: absolute;
+    inset: 22px;
     border-radius: 50%;
     background: var(--gradient-primary);
-    box-shadow: 0 0 40px rgba(0, 242, 254, 0.35);
-    margin-bottom: 1.5rem;
+    box-shadow: 0 0 32px rgba(0, 242, 254, 0.5);
+    animation: pulseCore 3s ease-in-out infinite;
+}
+
+@keyframes pulseCore {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.08); opacity: 0.85; }
 }
 
 .hero-title {
-    font-size: 2.75rem;
-    font-weight: 800;
-    margin-bottom: 0.75rem;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.5px;
+    font-size: 2.35rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.8px;
+    color: var(--text-primary);
 }
 
 .hero-subtitle {
     color: var(--text-secondary);
-    font-size: 1.15rem;
-    line-height: 1.5;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 480px;
 }
 
-/* ===================== Message Bubbles ===================== */
+.hero-suggestions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    width: 100%;
+    max-width: 520px;
+}
+
+.suggestion-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+}
+
+.suggestion-chip:hover {
+    background: var(--bg-card-hover);
+    border-color: rgba(0, 242, 254, 0.3);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.chip-icon {
+    font-size: 1rem;
+    color: var(--accent-cyan);
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Message Bubbles
+   ========================================================================== */
 .arbin-message-row {
     width: 100%;
     max-width: 820px;
     display: flex;
-    gap: 1.25rem;
-    animation: slideUp 0.3s ease;
+    gap: 1rem;
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.arbin-message-row.user {
-    justify-content: flex-end;
-}
-
-.arbin-message-row.ai {
-    justify-content: flex-start;
-}
+.arbin-message-row.user { justify-content: flex-end; }
+.arbin-message-row.ai { justify-content: flex-start; }
 
 .message-avatar {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     flex-shrink: 0;
+    font-family: var(--font-sans);
 }
 
 .message-avatar.ai {
     background: var(--gradient-primary);
-    color: var(--bg-obsidian);
-    box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+    color: #04060d;
+    box-shadow: 0 0 16px rgba(0, 242, 254, 0.35);
+    position: relative;
 }
 
 .message-avatar.user {
-    background-color: #1e293b;
+    background: var(--bg-card);
     color: var(--text-primary);
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--border-medium);
 }
 
 .message-bubble-content {
-    padding: 1rem 1.35rem;
+    padding: 0.9rem 1.2rem;
     border-radius: var(--radius-lg);
     max-width: 78%;
-    line-height: 1.65;
-    font-size: 0.95rem;
+    line-height: 1.7;
+    font-size: 0.92rem;
     word-wrap: break-word;
     white-space: pre-wrap;
 }
 
 .user .message-bubble-content {
-    background-color: #131e35;
+    background: linear-gradient(135deg, #1a2440 0%, #131c30 100%);
     color: var(--text-primary);
-    border-top-right-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-top-right-radius: 5px;
+    border: 1px solid rgba(79, 172, 254, 0.15);
 }
 
 .ai .message-bubble-content {
     background-color: var(--bg-card);
     color: var(--text-primary);
-    border-top-left-radius: 4px;
+    border-top-left-radius: 5px;
     border: 1px solid var(--border-subtle);
 }
 
@@ -508,55 +857,153 @@ html, body {
     background-color: var(--error-bg);
     border-color: var(--error-border);
     color: var(--error-text);
-    font-family: monospace;
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.55;
+}
+
+/* Thinking indicator */
+.thinking-dots {
+    display: inline-flex;
+    gap: 4px;
+    padding: 0.2rem 0;
 }
 
 .thinking-dots span {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    margin-right: 3px;
+    width: 7px;
+    height: 7px;
     background: var(--accent-cyan);
     border-radius: 50%;
-    animation: thinkingPulse 1.2s infinite ease-in-out;
+    animation: thinkingPulse 1.3s infinite ease-in-out;
 }
 
-.thinking-dots span:nth-child(2) { animation-delay: 0.15s; }
-.thinking-dots span:nth-child(3) { animation-delay: 0.3s; }
+.thinking-dots span:nth-child(2) { animation-delay: 0.18s; }
+.thinking-dots span:nth-child(3) { animation-delay: 0.36s; }
 
 @keyframes thinkingPulse {
-    0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); }
-    40% { opacity: 1; transform: scale(1); }
+    0%, 80%, 100% { opacity: 0.2; transform: translateY(0) scale(0.9); }
+    40% { opacity: 1; transform: translateY(-3px) scale(1); }
 }
 
-/* ===================== Input Dock ===================== */
+/* ==========================================================================
+   Attachments
+   ========================================================================== */
+.attachments-preview {
+    width: 100%;
+    max-width: 820px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.65rem;
+    empty-cells: hide;
+}
+
+.attachments-preview:empty { display: none; }
+
+.attachment-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.55rem 0.45rem 0.75rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    max-width: 220px;
+    animation: slideUp 0.25s ease;
+}
+
+.attachment-chip .file-icon {
+    color: var(--accent-cyan);
+    flex-shrink: 0;
+    display: flex;
+}
+
+.attachment-chip .file-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+
+.attachment-chip .file-size {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    flex-shrink: 0;
+}
+
+.attachment-chip .remove-attach {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+}
+
+.attachment-chip .remove-attach:hover {
+    background: var(--error-bg);
+    color: var(--error-text);
+}
+
+/* ==========================================================================
+   Input Dock
+   ========================================================================== */
 .arbin-input-dock-footer {
-    padding: 1.25rem 1.5rem 1.5rem 1.5rem;
-    background-color: var(--bg-surface);
+    padding: 1rem 1.5rem 1.25rem;
+    background-color: rgba(7, 11, 20, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-top: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
 }
 
 .arbin-input-box-container {
     width: 100%;
     max-width: 820px;
     background-color: var(--bg-obsidian);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-xl);
     display: flex;
     align-items: flex-end;
-    padding: 0.6rem 0.75rem 0.6rem 1.15rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    padding: 0.55rem 0.6rem 0.55rem 0.6rem;
+    box-shadow: var(--shadow-md);
+    transition: border-color 0.25s, box-shadow 0.25s;
 }
 
 .arbin-input-box-container:focus-within {
     border-color: var(--accent-cyan);
-    box-shadow: 0 0 20px rgba(0, 242, 254, 0.15), 0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.08), var(--shadow-glow), var(--shadow-md);
+}
+
+.attach-btn {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.attach-btn:hover {
+    color: var(--accent-cyan);
+    background: rgba(0, 242, 254, 0.08);
 }
 
 #user-prompt-textarea {
@@ -564,19 +1011,16 @@ html, body {
     background: transparent;
     border: none;
     color: var(--text-primary);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-family: var(--font-sans);
     outline: none;
     resize: none;
-    max-height: 160px;
-    padding-top: 0.35rem;
-    padding-bottom: 0.35rem;
+    max-height: 200px;
+    padding: 0.55rem 0.5rem;
     line-height: 1.5;
 }
 
-#user-prompt-textarea::placeholder {
-    color: var(--text-muted);
-}
+#user-prompt-textarea::placeholder { color: var(--text-muted); }
 
 .arbin-submit-btn {
     background: var(--gradient-primary);
@@ -588,31 +1032,32 @@ html, body {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    color: var(--bg-obsidian);
-    transition: all 0.2s ease;
+    color: #04060d;
+    transition: all 0.2s;
     flex-shrink: 0;
-    margin-left: 0.75rem;
 }
 
-.arbin-submit-btn:hover {
-    opacity: 0.9;
-    transform: scale(1.05);
+.arbin-submit-btn:hover:not(:disabled) {
+    transform: scale(1.06);
+    box-shadow: 0 4px 20px rgba(0, 242, 254, 0.4);
 }
 
 .arbin-submit-btn:disabled {
-    opacity: 0.5;
+    opacity: 0.35;
     cursor: not-allowed;
-    transform: none;
 }
 
 .footer-disclaimer {
-    font-size: 0.75rem;
+    margin-top: 0.6rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
     text-align: center;
     letter-spacing: 0.2px;
 }
 
-/* ===================== Animations ===================== */
+/* ==========================================================================
+   Animations
+   ========================================================================== */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -623,59 +1068,71 @@ html, body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===================== Mobile ===================== */
-.mobile-menu-toggle {
-    display: none;
-    position: absolute;
-    top: 14px;
-    left: 14px;
-    z-index: 100;
-    width: 38px;
-    height: 38px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    color: var(--accent-cyan);
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-}
-
+/* ==========================================================================
+   Sidebar Backdrop (mobile)
+   ========================================================================== */
 .arbin-sidebar-backdrop {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 9;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 15;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.arbin-sidebar-backdrop.active {
+    display: block;
+    opacity: 1;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media screen and (max-width: 900px) {
+    .model-select { max-width: 160px; min-width: 120px; }
 }
 
 @media screen and (max-width: 768px) {
     .mobile-menu-toggle { display: flex; }
 
     .arbin-sidebar {
-        position: absolute;
-        left: -100%;
+        position: fixed;
+        left: 0;
         top: 0;
         bottom: 0;
+        transform: translateX(-100%);
         width: 280px;
-        box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8);
+        box-shadow: 20px 0 60px rgba(0, 0, 0, 0.8);
     }
 
-    .arbin-sidebar.mobile-open { left: 0; }
-    .arbin-sidebar-backdrop.active { display: block; }
+    .arbin-sidebar.mobile-open {
+        transform: translateX(0);
+    }
 
     .arbin-top-config-bar {
-        padding: 0.75rem 1rem 0.75rem 4.5rem;
-        flex-direction: column;
-        align-items: stretch;
+        padding: 0.75rem 1rem;
+        flex-wrap: wrap;
     }
 
-    .config-input-wrapper { max-width: 100%; flex: none; }
-    .model-select { max-width: 100%; width: 100%; }
-    .refresh-models-btn { width: 100%; }
-    .arbin-chat-scrollport { padding: 1.25rem 1rem; }
-    .arbin-input-dock-footer { padding: 1rem; }
-    .hero-title { font-size: 2rem; }
-    .message-bubble-content { max-width: 85%; }
-    .arbin-modal-container { padding: 2.25rem 1.75rem; }
+    .config-input-wrapper { order: 2; width: 100%; flex: 1 0 100%; }
+    .model-picker { order: 3; flex: 1; width: 100%; }
+    .model-select { flex: 1; max-width: none; }
+    .refresh-models-btn { width: 38px; }
+
+    .arbin-chat-scrollport { padding: 1.25rem 1rem; gap: 1.15rem; }
+    .arbin-input-dock-footer { padding: 0.75rem 1rem 1rem; }
+    .hero-title { font-size: 1.85rem; }
+    .hero-suggestions { grid-template-columns: 1fr; }
+    .message-bubble-content { max-width: 85%; font-size: 0.9rem; }
+    .arbin-modal-container { padding: 2.25rem 1.75rem 1.75rem; }
+    .arbin-modal-title { font-size: 1.5rem; }
+}
+
+@media screen and (max-width: 420px) {
+    .hero-title { font-size: 1.6rem; }
+    .hero-subtitle { font-size: 0.9rem; }
+    .sidebar-section-label { font-size: 0.62rem; }
 }

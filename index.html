@@ -2,91 +2,151 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta name="theme-color" content="#05080f" />
-<title>Arbin AI - Advanced Neural Interface</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#04060d" />
+<title>Arbin AI — Neural Interface</title>
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- ===================== Welcome Permission Modal ===================== -->
+<!-- ============ Welcome Modal ============ -->
 <div class="arbin-modal-overlay" id="permission-modal">
+  <div class="arbin-modal-glow"></div>
   <div class="arbin-modal-container">
     <div class="arbin-profile-badge">
+      <div class="arbin-profile-ring"></div>
       <span class="arbin-profile-text">AS</span>
     </div>
-    <h1 class="arbin-modal-title">Welcome to Arbin AI</h1>
+    <h1 class="arbin-modal-title">Welcome to <span class="gradient-text">Arbin AI</span></h1>
     <p class="arbin-modal-description">
-      An uncensored AI that can answer anything. Establish your tunnel link and begin exploring boundless intelligence.
+      An uncensored neural interface. Connect your tunnel, pick a model, and start exploring boundless intelligence.
     </p>
-    <button class="arbin-modal-action-btn" id="enter-workspace-btn">Enter Workspace</button>
+    <button class="arbin-modal-action-btn" id="enter-workspace-btn">
+      <span>Enter Workspace</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </button>
+    <div class="arbin-modal-footer">v2.0 — Neural Core</div>
   </div>
 </div>
 
-<!-- ===================== App Master Layout ===================== -->
+<!-- ============ App Layout ============ -->
 <div class="arbin-app-layout">
 
-  <!-- Sidebar -->
+  <!-- ===== Sidebar ===== -->
   <aside class="arbin-sidebar" id="arbin-sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">
+        <div class="brand-pulse"></div>
+        <span class="brand-letter">A</span>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Arbin AI</span>
+        <span class="brand-sub">Neural Core v2</span>
+      </div>
+    </div>
+
     <div class="arbin-sidebar-header">
       <button class="arbin-new-chat-btn" id="new-chat-btn">
-        <span class="btn-icon">+</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         <span>New Chat</span>
       </button>
     </div>
+
+    <div class="sidebar-section-label">Recent Conversations</div>
     <div class="arbin-history-scroll-container" id="history-container"></div>
+
     <div class="arbin-sidebar-footer">
-      <div class="system-status-indicator">
-        <span class="status-dot"></span>
-        <span>Neural link standby</span>
+      <div class="status-row">
+        <span class="status-dot" id="status-dot"></span>
+        <span class="status-text" id="status-text">Standby</span>
       </div>
+      <button class="clear-all-btn" id="clear-all-btn" title="Delete all conversations">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        <span>Clear All</span>
+      </button>
     </div>
   </aside>
 
-  <!-- Main Workspace -->
+  <!-- ===== Main Workspace ===== -->
   <main class="arbin-main-workspace">
 
     <!-- Top Config Bar -->
     <div class="arbin-top-config-bar">
+      <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
       <div class="config-input-wrapper">
+        <span class="config-input-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </span>
         <input
           type="text"
           id="tunnel-url-input"
-          placeholder="https://xxxx.trycloudflare.com"
+          placeholder="Paste your Cloudflare tunnel URL…"
           autocomplete="off"
           spellcheck="false"
         />
         <span class="config-indicator-badge" id="tunnel-status-indicator">Unlinked</span>
       </div>
-      <select id="model-select" class="model-select" aria-label="Model">
-        <option value="">Paste tunnel URL to load models</option>
-      </select>
-      <button class="refresh-models-btn" id="refresh-models-btn" title="Refresh model list" aria-label="Refresh models">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="23 4 23 10 17 10"></polyline>
-          <polyline points="1 20 1 14 7 14"></polyline>
-          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-        </svg>
-      </button>
-    </div>
 
-    <!-- Chat Scrollport -->
-    <div class="arbin-chat-scrollport" id="chat-scrollport">
-      <div class="arbin-welcome-hero" id="welcome-hero-screen">
-        <div class="hero-logo-glow"></div>
-        <h2 class="hero-title">Arbin AI</h2>
-        <p class="hero-subtitle">What would you like to build, analyze, or discover today?</p>
+      <div class="model-picker">
+        <select id="model-select" class="model-select" aria-label="Model">
+          <option value="">No models yet</option>
+        </select>
+        <button class="refresh-models-btn" id="refresh-models-btn" title="Refresh models">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
       </div>
     </div>
 
-    <!-- Input Dock Footer -->
+    <!-- Chat Area -->
+    <div class="arbin-chat-scrollport" id="chat-scrollport">
+      <div class="arbin-welcome-hero" id="welcome-hero-screen">
+        <div class="hero-orbit">
+          <div class="orbit-ring"></div>
+          <div class="orbit-core"></div>
+        </div>
+        <h2 class="hero-title">Hello, I'm <span class="gradient-text">Arbin</span></h2>
+        <p class="hero-subtitle">What would you like to build, analyze, or discover today?</p>
+        <div class="hero-suggestions">
+          <button class="suggestion-chip" data-prompt="Explain quantum entanglement simply.">
+            <span class="chip-icon">⚛</span> Quantum entanglement
+          </button>
+          <button class="suggestion-chip" data-prompt="Write a Python script to rename files in a folder.">
+            <span class="chip-icon">⌘</span> Python script
+          </button>
+          <button class="suggestion-chip" data-prompt="Give me 5 unusual startup ideas.">
+            <span class="chip-icon">✦</span> Startup ideas
+          </button>
+          <button class="suggestion-chip" data-prompt="Summarize the history of the internet in 5 sentences.">
+            <span class="chip-icon">◈</span> History of internet
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Dock -->
     <footer class="arbin-input-dock-footer">
+      <div class="attachments-preview" id="attachments-preview"></div>
+
       <div class="arbin-input-box-container">
+        <button class="attach-btn" id="attach-btn" title="Attach file">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+          </svg>
+        </button>
+        <input type="file" id="file-input" multiple accept=".txt,.md,.json,.csv,.py,.js,.html,.css,.xml,.yaml,.yml,.log,.pdf,.docx" hidden />
+
         <textarea
           id="user-prompt-textarea"
           rows="1"
-          placeholder="Message Arbin AI..."
+          placeholder="Message Arbin AI…"
         ></textarea>
+
         <button class="arbin-submit-btn" id="submit-prompt-btn" aria-label="Send">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="19" x2="12" y2="5"></line>
@@ -101,6 +161,8 @@
 
   </main>
 </div>
+
+<div class="arbin-sidebar-backdrop" id="sidebar-backdrop"></div>
 
 <script src="script.js"></script>
 </body>
