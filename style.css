@@ -331,7 +331,6 @@ html, body {
     border: 1px solid rgba(0, 242, 254, 0.3);
 }
 
-/* Model Selector */
 .model-select {
     padding: 0.65rem 1rem;
     background-color: var(--bg-obsidian);
@@ -351,6 +350,34 @@ html, body {
 .model-select:hover {
     border-color: var(--accent-cyan);
     box-shadow: 0 0 12px rgba(0, 242, 254, 0.15);
+}
+
+.refresh-models-btn {
+    width: 38px;
+    height: 38px;
+    background-color: var(--bg-obsidian);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--accent-cyan);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.refresh-models-btn:hover {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 12px rgba(0, 242, 254, 0.15);
+}
+
+.refresh-models-btn.spinning svg {
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 /* ===================== Chat Scrollport ===================== */
@@ -374,7 +401,6 @@ html, body {
     border-radius: 10px;
 }
 
-/* Welcome Hero */
 .arbin-welcome-hero {
     display: flex;
     flex-direction: column;
@@ -486,7 +512,6 @@ html, body {
     font-size: 0.9rem;
 }
 
-/* Thinking indicator */
 .thinking-dots span {
     display: inline-block;
     width: 6px;
@@ -598,7 +623,7 @@ html, body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===================== Mobile Sidebar Toggle ===================== */
+/* ===================== Mobile ===================== */
 .mobile-menu-toggle {
     display: none;
     position: absolute;
@@ -624,11 +649,8 @@ html, body {
     z-index: 9;
 }
 
-/* ===================== Responsive ===================== */
 @media screen and (max-width: 768px) {
-    .mobile-menu-toggle {
-        display: flex;
-    }
+    .mobile-menu-toggle { display: flex; }
 
     .arbin-sidebar {
         position: absolute;
@@ -639,13 +661,8 @@ html, body {
         box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8);
     }
 
-    .arbin-sidebar.mobile-open {
-        left: 0;
-    }
-
-    .arbin-sidebar-backdrop.active {
-        display: block;
-    }
+    .arbin-sidebar.mobile-open { left: 0; }
+    .arbin-sidebar-backdrop.active { display: block; }
 
     .arbin-top-config-bar {
         padding: 0.75rem 1rem 0.75rem 4.5rem;
@@ -653,33 +670,12 @@ html, body {
         align-items: stretch;
     }
 
-    .config-input-wrapper {
-        max-width: 100%;
-        flex: none;
-    }
-
-    .model-select {
-        max-width: 100%;
-        width: 100%;
-    }
-
-    .arbin-chat-scrollport {
-        padding: 1.25rem 1rem;
-    }
-
-    .arbin-input-dock-footer {
-        padding: 1rem;
-    }
-
-    .hero-title {
-        font-size: 2rem;
-    }
-
-    .message-bubble-content {
-        max-width: 85%;
-    }
-
-    .arbin-modal-container {
-        padding: 2.25rem 1.75rem;
-    }
+    .config-input-wrapper { max-width: 100%; flex: none; }
+    .model-select { max-width: 100%; width: 100%; }
+    .refresh-models-btn { width: 100%; }
+    .arbin-chat-scrollport { padding: 1.25rem 1rem; }
+    .arbin-input-dock-footer { padding: 1rem; }
+    .hero-title { font-size: 2rem; }
+    .message-bubble-content { max-width: 85%; }
+    .arbin-modal-container { padding: 2.25rem 1.75rem; }
 }
