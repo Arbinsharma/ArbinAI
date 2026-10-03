@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#05080f" />
+<title>Arbin AI - Advanced Neural Interface</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===================== Welcome Permission Modal ===================== -->
+<div class="arbin-modal-overlay" id="permission-modal">
+  <div class="arbin-modal-container">
+    <div class="arbin-profile-badge">
+      <span class="arbin-profile-text">AS</span>
+    </div>
+    <h1 class="arbin-modal-title">Welcome to Arbin AI</h1>
+    <p class="arbin-modal-description">
+      An uncensored AI that can answer anything. Establish your tunnel link and begin exploring boundless intelligence.
+    </p>
+    <button class="arbin-modal-action-btn" id="enter-workspace-btn">Enter Workspace</button>
+  </div>
+</div>
+
+<!-- ===================== App Master Layout ===================== -->
+<div class="arbin-app-layout">
+
+  <!-- Sidebar -->
+  <aside class="arbin-sidebar" id="arbin-sidebar">
+    <div class="arbin-sidebar-header">
+      <button class="arbin-new-chat-btn" id="new-chat-btn">
+        <span class="btn-icon">+</span>
+        <span>New Chat</span>
+      </button>
+    </div>
+    <div class="arbin-history-scroll-container" id="history-container"></div>
+    <div class="arbin-sidebar-footer">
+      <div class="system-status-indicator">
+        <span class="status-dot"></span>
+        <span>Neural link standby</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Workspace -->
+  <main class="arbin-main-workspace">
+
+    <!-- Top Config Bar -->
+    <div class="arbin-top-config-bar">
+      <div class="config-input-wrapper">
+        <input
+          type="text"
+          id="tunnel-url-input"
+          placeholder="https://xxxx.trycloudflare.com"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <span class="config-indicator-badge" id="tunnel-status-indicator">Unlinked</span>
+      </div>
+    </div>
+
+    <!-- Chat Scrollport -->
+    <div class="arbin-chat-scrollport" id="chat-scrollport">
+      <div class="arbin-welcome-hero" id="welcome-hero-screen">
+        <div class="hero-logo-glow"></div>
+        <h2 class="hero-title">Arbin AI</h2>
+        <p class="hero-subtitle">What would you like to build, analyze, or discover today?</p>
+      </div>
+    </div>
+
+    <!-- Input Dock Footer -->
+    <footer class="arbin-input-dock-footer">
+      <div class="arbin-input-box-container">
+        <textarea
+          id="user-prompt-textarea"
+          rows="1"
+          placeholder="Message Arbin AI..."
+        ></textarea>
+        <button class="arbin-submit-btn" id="submit-prompt-btn" aria-label="Send">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"></line>
+            <polyline points="5 12 12 5 19 12"></polyline>
+          </svg>
+        </button>
+      </div>
+      <p class="footer-disclaimer">
+        Arbin AI may generate inaccurate or unfiltered statements. Verify critical data.
+      </p>
+    </footer>
+
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
