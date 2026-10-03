@@ -9,6 +9,7 @@ const ArbinApp = (() => {
     const STORAGE_KEY = 'arbin-ai-sessions-v1';
     const TUNNEL_STORAGE_KEY = 'arbin-ai-tunnel-url';
     const MODEL_STORAGE_KEY = 'arbin-ai-model';
+    const NUM_CTX = 4096;
 
     let chatSessions = [];
     let currentSessionIndex = null;
@@ -70,17 +71,15 @@ const ArbinApp = (() => {
     }
 
     function bindEvents() {
-        // Modal close
+        // Modal close — button, backdrop click, and Escape key
         if (elements.enterBtn) {
             elements.enterBtn.addEventListener('click', closeWelcomeModal);
         }
-        // Also allow clicking the backdrop to dismiss
         if (elements.modalOverlay) {
             elements.modalOverlay.addEventListener('click', (e) => {
                 if (e.target === elements.modalOverlay) closeWelcomeModal();
             });
         }
-        // Escape key dismisses modal
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && elements.modalOverlay && !elements.modalOverlay.classList.contains('hidden')) {
                 closeWelcomeModal();
@@ -393,7 +392,15 @@ const ArbinApp = (() => {
         const thinkingId = appendThinkingNode();
 
         const cleanBaseUrl = rawUrl.replace(/\/+$/, '');
-        const apiEndpoint = `${cleanBaseUrl}/api/generate`;
+        const apiEndpoint = `${cleanBaseUrl}/api/chat`;
+
+        // Build full chat history (excluding error rows) so the model remembers context
+        const historyMessages = activeSession.messages
+            .filter(m => !m.isError)
+            .map(m => ({
+                role: m.sender === 'user' ? 'user' : 'assistant',
+                content: m.text
+            }));
 
         try {
             const response = await fetch(apiEndpoint, {
@@ -401,8 +408,9 @@ const ArbinApp = (() => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     model: currentModel,
-                    prompt: promptText,
-                    stream: false
+                    messages: historyMessages,
+                    stream: false,
+                    options: { num_ctx: NUM_CTX }
                 })
             });
 
@@ -417,8 +425,9 @@ const ArbinApp = (() => {
             }
 
             const responsePayload = await response.json();
-            const modelResponseText = responsePayload.response
-                || 'Received empty response string structure from backend model.';
+            const modelResponseText =
+                responsePayload?.message?.content
+                || 'Received empty response from backend model.';
 
             activeSession.messages.push({ sender: 'ai', text: modelResponseText });
             appendMessageNode(modelResponseText, 'ai');
