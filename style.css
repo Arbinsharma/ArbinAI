@@ -272,21 +272,25 @@ html, body {
 }
 
 .arbin-top-config-bar {
-    height: var(--topbar-height);
-    padding: 0 1.75rem;
+    min-height: var(--topbar-height);
+    padding: 0.75rem 1.75rem;
     background-color: var(--bg-surface);
     border-bottom: 1px solid var(--border-subtle);
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    gap: 0.75rem;
+    flex-wrap: wrap;
 }
 
 .config-input-wrapper {
     position: relative;
     width: 100%;
-    max-width: 520px;
+    max-width: 460px;
     display: flex;
     align-items: center;
+    flex: 1;
+    min-width: 220px;
 }
 
 .config-input-wrapper input {
@@ -325,6 +329,28 @@ html, body {
     background: rgba(0, 242, 254, 0.15);
     color: var(--accent-cyan);
     border: 1px solid rgba(0, 242, 254, 0.3);
+}
+
+/* Model Selector */
+.model-select {
+    padding: 0.65rem 1rem;
+    background-color: var(--bg-obsidian);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-family: var(--font-sans);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    max-width: 260px;
+    min-width: 180px;
+}
+
+.model-select:focus,
+.model-select:hover {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 12px rgba(0, 242, 254, 0.15);
 }
 
 /* ===================== Chat Scrollport ===================== */
@@ -460,7 +486,7 @@ html, body {
     font-size: 0.9rem;
 }
 
-/* Thinking indicator dots */
+/* Thinking indicator */
 .thinking-dots span {
     display: inline-block;
     width: 6px;
@@ -622,11 +648,19 @@ html, body {
     }
 
     .arbin-top-config-bar {
-        padding: 0 1rem 0 4.5rem;
+        padding: 0.75rem 1rem 0.75rem 4.5rem;
+        flex-direction: column;
+        align-items: stretch;
     }
 
     .config-input-wrapper {
         max-width: 100%;
+        flex: none;
+    }
+
+    .model-select {
+        max-width: 100%;
+        width: 100%;
     }
 
     .arbin-chat-scrollport {
@@ -649,4 +683,3 @@ html, body {
         padding: 2.25rem 1.75rem;
     }
 }
-
