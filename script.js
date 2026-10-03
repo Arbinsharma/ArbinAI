@@ -40,7 +40,6 @@ const ArbinApp = (() => {
         bindEvents();
         checkInitialState();
 
-        // If a tunnel URL was restored, try to fetch models immediately
         const savedTunnel = elements.tunnelInput.value.trim();
         if (savedTunnel) {
             fetchAvailableModels(savedTunnel);
@@ -71,10 +70,22 @@ const ArbinApp = (() => {
     }
 
     function bindEvents() {
-        // Modal
+        // Modal close
         if (elements.enterBtn) {
             elements.enterBtn.addEventListener('click', closeWelcomeModal);
         }
+        // Also allow clicking the backdrop to dismiss
+        if (elements.modalOverlay) {
+            elements.modalOverlay.addEventListener('click', (e) => {
+                if (e.target === elements.modalOverlay) closeWelcomeModal();
+            });
+        }
+        // Escape key dismisses modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && elements.modalOverlay && !elements.modalOverlay.classList.contains('hidden')) {
+                closeWelcomeModal();
+            }
+        });
 
         // Sidebar
         if (elements.newChatBtn) {
@@ -236,7 +247,6 @@ const ArbinApp = (() => {
                 .map(name => `<option value="${name}">${name}</option>`)
                 .join('');
 
-            // Prefer saved model, then mythomax, then first
             const savedModel = localStorage.getItem(MODEL_STORAGE_KEY);
             const preferred =
                 (savedModel && models.includes(savedModel) && savedModel) ||
@@ -280,4 +290,172 @@ const ArbinApp = (() => {
 
         const activeSession = chatSessions[currentSessionIndex];
 
-        if (!activeSession || active
+        if (!activeSession || activeSession.messages.length === 0) {
+            elements.chatScrollport.innerHTML = `
+                <div class="arbin-welcome-hero" id="welcome-hero-screen">
+                    <div class="hero-logo-glow"></div>
+                    <h2 class="hero-title">Arbin AI</h2>
+                    <p class="hero-subtitle">What would you like to build, analyze, or discover today?</p>
+                </div>
+            `;
+            return;
+        }
+
+        activeSession.messages.forEach(msg => {
+            appendMessageNode(msg.text, msg.sender, msg.isError || false, false);
+        });
+
+        elements.chatScrollport.scrollTop = elements.chatScrollport.scrollHeight;
+    }
+
+    function appendMessageNode(text, sender, isError = false, scrollToBottom = true) {
+        const hero = document.getElementById('welcome-hero-screen');
+        if (hero) hero.remove();
+
+        const row = document.createElement('div');
+        row.className = `arbin-message-row ${sender}`;
+
+        const avatar = document.createElement('div');
+        avatar.className = `message-avatar ${sender}`;
+        avatar.textContent = sender === 'ai' ? 'AI' : 'AS';
+
+        const bubble = document.createElement('div');
+        bubble.className = `message-bubble-content ${isError ? 'error-state' : ''}`;
+        bubble.textContent = text;
+
+        if (sender === 'ai') {
+            row.appendChild(avatar);
+            row.appendChild(bubble);
+        } else {
+            row.appendChild(bubble);
+            row.appendChild(avatar);
+        }
+
+        elements.chatScrollport.appendChild(row);
+
+        if (scrollToBottom) {
+            elements.chatScrollport.scrollTop = elements.chatScrollport.scrollHeight;
+        }
+    }
+
+    function appendThinkingNode() {
+        const thinkingId = 'thinking-node-' + Date.now();
+        const row = document.createElement('div');
+        row.className = 'arbin-message-row ai';
+        row.id = thinkingId;
+        row.innerHTML = `
+            <div class="message-avatar ai">AI</div>
+            <div class="message-bubble-content">
+                <span class="thinking-dots"><span></span><span></span><span></span></span>
+            </div>
+        `;
+        elements.chatScrollport.appendChild(row);
+        elements.chatScrollport.scrollTop = elements.chatScrollport.scrollHeight;
+        return thinkingId;
+    }
+
+    // ===================== Submission =====================
+    async function executePromptSubmission() {
+        if (isStreaming) return;
+
+        const rawUrl = elements.tunnelInput.value.trim();
+        const promptText = elements.promptTextarea.value.trim();
+
+        if (!rawUrl) {
+            alert('Please paste your active Cloudflare tunnel URL in the top bar before prompting.');
+            elements.tunnelInput.focus();
+            return;
+        }
+
+        if (!promptText) return;
+
+        if (currentSessionIndex === null) {
+            createNewChatSession(false);
+        }
+
+        const activeSession = chatSessions[currentSessionIndex];
+
+        if (activeSession.messages.length === 0) {
+            activeSession.title = promptText.length > 28
+                ? promptText.substring(0, 28) + '...'
+                : promptText;
+            renderHistoryList();
+        }
+
+        activeSession.messages.push({ sender: 'user', text: promptText });
+        appendMessageNode(promptText, 'user');
+
+        elements.promptTextarea.value = '';
+        elements.promptTextarea.style.height = 'auto';
+        isStreaming = true;
+        elements.submitBtn.disabled = true;
+
+        const thinkingId = appendThinkingNode();
+
+        const cleanBaseUrl = rawUrl.replace(/\/+$/, '');
+        const apiEndpoint = `${cleanBaseUrl}/api/generate`;
+
+        try {
+            const response = await fetch(apiEndpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: currentModel,
+                    prompt: promptText,
+                    stream: false
+                })
+            });
+
+            document.getElementById(thinkingId)?.remove();
+
+            if (!response.ok) {
+                const exactHttpError = `HTTP Status Error [${response.status}] ${response.statusText}`;
+                activeSession.messages.push({ sender: 'ai', text: exactHttpError, isError: true });
+                appendMessageNode(exactHttpError, 'ai', true);
+                persistSessions();
+                return;
+            }
+
+            const responsePayload = await response.json();
+            const modelResponseText = responsePayload.response
+                || 'Received empty response string structure from backend model.';
+
+            activeSession.messages.push({ sender: 'ai', text: modelResponseText });
+            appendMessageNode(modelResponseText, 'ai');
+            persistSessions();
+
+        } catch (error) {
+            document.getElementById(thinkingId)?.remove();
+
+            console.error('Arbin AI fetch failed:', {
+                error,
+                url: apiEndpoint,
+                model: currentModel
+            });
+
+            let hint = '';
+            if (error.message === 'Failed to fetch') {
+                hint = ' — check: (1) tunnel is live, (2) Ollama is running, (3) OLLAMA_ORIGINS allows this page, (4) not mixing https→http.';
+            }
+
+            const exactNetworkError = `Connection Failed: ${error.message}${hint}`;
+            activeSession.messages.push({ sender: 'ai', text: exactNetworkError, isError: true });
+            appendMessageNode(exactNetworkError, 'ai', true);
+            persistSessions();
+
+        } finally {
+            isStreaming = false;
+            elements.submitBtn.disabled = false;
+            elements.promptTextarea.focus();
+        }
+    }
+
+    // ===================== Public API =====================
+    return {
+        init,
+        closeWelcomeModal,
+        createNewChatSession
+    };
+})();
+
+document.addEventListener('DOMContentLoaded', ArbinApp.init);
