@@ -1069,23 +1069,34 @@ body::before {
 }
 
 /* ==========================================================================
-   Sidebar Backdrop (mobile)
+   Sidebar Backdrop (mobile only)
    ========================================================================== */
 .arbin-sidebar-backdrop {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 15;
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .arbin-sidebar-backdrop.active {
     display: block;
     opacity: 1;
+    pointer-events: auto;
+}
+
+/* On desktop, never show the backdrop regardless of state */
+@media screen and (min-width: 769px) {
+    .arbin-sidebar-backdrop,
+    .arbin-sidebar-backdrop.active {
+        display: none !important;
+    }
+    .mobile-menu-toggle {
+        display: none !important;
+    }
 }
 
 /* ==========================================================================
