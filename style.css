@@ -85,9 +85,7 @@ body::before {
     -webkit-text-fill-color: transparent;
 }
 
-/* ==========================================================================
-   Welcome Modal
-   ========================================================================== */
+/* =========================== Modal =========================== */
 .arbin-modal-overlay {
     position: fixed;
     inset: 0;
@@ -241,9 +239,7 @@ body::before {
     font-family: var(--font-mono);
 }
 
-/* ==========================================================================
-   App Layout
-   ========================================================================== */
+/* =========================== Layout =========================== */
 .arbin-app-layout {
     display: flex;
     width: 100vw;
@@ -253,9 +249,7 @@ body::before {
     z-index: 1;
 }
 
-/* ==========================================================================
-   Sidebar
-   ========================================================================== */
+/* =========================== Sidebar =========================== */
 .arbin-sidebar {
     width: var(--sidebar-width);
     background-color: var(--bg-sidebar);
@@ -311,11 +305,7 @@ body::before {
     -webkit-text-fill-color: transparent;
 }
 
-.brand-text {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-}
+.brand-text { display: flex; flex-direction: column; gap: 1px; }
 
 .brand-name {
     font-size: 0.95rem;
@@ -330,9 +320,7 @@ body::before {
     font-family: var(--font-mono);
 }
 
-.arbin-sidebar-header {
-    padding: 1rem 1rem 0.75rem;
-}
+.arbin-sidebar-header { padding: 1rem 1rem 0.75rem; }
 
 .arbin-new-chat-btn {
     width: 100%;
@@ -358,8 +346,6 @@ body::before {
     transform: translateY(-1px);
 }
 
-.arbin-new-chat-btn:active { transform: translateY(0); }
-
 .sidebar-section-label {
     font-size: 0.68rem;
     font-weight: 600;
@@ -380,7 +366,6 @@ body::before {
 }
 
 .arbin-history-scroll-container::-webkit-scrollbar { width: 5px; }
-.arbin-history-scroll-container::-webkit-scrollbar-track { background: transparent; }
 .arbin-history-scroll-container::-webkit-scrollbar-thumb {
     background: rgba(148, 163, 184, 0.15);
     border-radius: 10px;
@@ -403,7 +388,6 @@ body::before {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    position: relative;
 }
 
 .history-item-pill::before {
@@ -482,7 +466,6 @@ body::before {
     border: 1px solid transparent;
     color: var(--text-muted);
     font-size: 0.72rem;
-    font-family: var(--font-sans);
     cursor: pointer;
     padding: 0.35rem 0.5rem;
     border-radius: var(--radius-sm);
@@ -495,9 +478,7 @@ body::before {
     background: var(--error-bg);
 }
 
-/* ==========================================================================
-   Main Workspace
-   ========================================================================== */
+/* =========================== Main =========================== */
 .arbin-main-workspace {
     flex: 1;
     display: flex;
@@ -508,9 +489,7 @@ body::before {
     overflow: hidden;
 }
 
-/* ==========================================================================
-   Top Config Bar
-   ========================================================================== */
+/* =========================== Top Bar =========================== */
 .arbin-top-config-bar {
     min-height: var(--topbar-height);
     padding: 0.75rem 1.5rem;
@@ -600,7 +579,6 @@ body::before {
     border-radius: var(--radius-md);
     color: var(--text-primary);
     font-size: 0.85rem;
-    font-family: var(--font-sans);
     outline: none;
     cursor: pointer;
     transition: all 0.2s;
@@ -664,9 +642,7 @@ body::before {
     flex-shrink: 0;
 }
 
-/* ==========================================================================
-   Chat Scrollport
-   ========================================================================== */
+/* =========================== Chat =========================== */
 .arbin-chat-scrollport {
     flex: 1;
     overflow-y: auto;
@@ -679,7 +655,6 @@ body::before {
 }
 
 .arbin-chat-scrollport::-webkit-scrollbar { width: 8px; }
-.arbin-chat-scrollport::-webkit-scrollbar-track { background: transparent; }
 .arbin-chat-scrollport::-webkit-scrollbar-thumb {
     background: rgba(148, 163, 184, 0.15);
     border-radius: 10px;
@@ -688,9 +663,7 @@ body::before {
     background: rgba(0, 242, 254, 0.3);
 }
 
-/* ==========================================================================
-   Welcome Hero
-   ========================================================================== */
+/* Welcome Hero */
 .arbin-welcome-hero {
     display: flex;
     flex-direction: column;
@@ -771,7 +744,6 @@ body::before {
     border-radius: var(--radius-md);
     color: var(--text-secondary);
     font-size: 0.85rem;
-    font-family: var(--font-sans);
     cursor: pointer;
     text-align: left;
     transition: all 0.2s;
@@ -791,9 +763,7 @@ body::before {
     flex-shrink: 0;
 }
 
-/* ==========================================================================
-   Message Bubbles
-   ========================================================================== */
+/* Messages */
 .arbin-message-row {
     width: 100%;
     max-width: 820px;
@@ -815,14 +785,12 @@ body::before {
     font-weight: 700;
     font-size: 0.82rem;
     flex-shrink: 0;
-    font-family: var(--font-sans);
 }
 
 .message-avatar.ai {
     background: var(--gradient-primary);
     color: #04060d;
     box-shadow: 0 0 16px rgba(0, 242, 254, 0.35);
-    position: relative;
 }
 
 .message-avatar.user {
@@ -886,9 +854,7 @@ body::before {
     40% { opacity: 1; transform: translateY(-3px) scale(1); }
 }
 
-/* ==========================================================================
-   Attachments
-   ========================================================================== */
+/* Attachments */
 .attachments-preview {
     width: 100%;
     max-width: 820px;
@@ -946,7 +912,6 @@ body::before {
     align-items: center;
     justify-content: center;
     transition: all 0.15s;
-    flex-shrink: 0;
 }
 
 .attachment-chip .remove-attach:hover {
@@ -954,9 +919,7 @@ body::before {
     color: var(--error-text);
 }
 
-/* ==========================================================================
-   Input Dock
-   ========================================================================== */
+/* Input */
 .arbin-input-dock-footer {
     padding: 1rem 1.5rem 1.25rem;
     background-color: rgba(7, 11, 20, 0.75);
@@ -976,7 +939,7 @@ body::before {
     border-radius: var(--radius-xl);
     display: flex;
     align-items: flex-end;
-    padding: 0.55rem 0.6rem 0.55rem 0.6rem;
+    padding: 0.55rem 0.6rem;
     box-shadow: var(--shadow-md);
     transition: border-color 0.25s, box-shadow 0.25s;
 }
@@ -1055,9 +1018,7 @@ body::before {
     letter-spacing: 0.2px;
 }
 
-/* ==========================================================================
-   Animations
-   ========================================================================== */
+/* Animations */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -1068,9 +1029,7 @@ body::before {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ==========================================================================
-   Sidebar Backdrop — dynamically created by JS
-   ========================================================================== */
+/* Backdrop (dynamic, JS-controlled) */
 .arbin-sidebar-backdrop {
     position: fixed;
     inset: 0;
@@ -1086,9 +1045,7 @@ body::before {
     pointer-events: auto;
 }
 
-/* ==========================================================================
-   Responsive
-   ========================================================================== */
+/* Responsive */
 @media screen and (max-width: 900px) {
     .model-select { max-width: 160px; min-width: 120px; }
 }
@@ -1129,16 +1086,13 @@ body::before {
     .arbin-modal-title { font-size: 1.5rem; }
 }
 
-/* On desktop: never show hamburger or backdrop */
 @media screen and (min-width: 769px) {
     .arbin-sidebar-backdrop,
     .arbin-sidebar-backdrop.active {
         display: none !important;
         pointer-events: none !important;
     }
-    .mobile-menu-toggle {
-        display: none !important;
-    }
+    .mobile-menu-toggle { display: none !important; }
     .arbin-sidebar {
         position: relative !important;
         transform: none !important;
@@ -1149,5 +1103,4 @@ body::before {
 @media screen and (max-width: 420px) {
     .hero-title { font-size: 1.6rem; }
     .hero-subtitle { font-size: 0.9rem; }
-    .sidebar-section-label { font-size: 0.62rem; }
 }
