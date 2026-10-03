@@ -1069,7 +1069,7 @@ body::before {
 }
 
 /* ==========================================================================
-   Sidebar Backdrop (mobile only)
+   Sidebar Backdrop — MOBILE ONLY, hidden on desktop no matter what
    ========================================================================== */
 .arbin-sidebar-backdrop {
     display: none;
@@ -1082,20 +1082,29 @@ body::before {
     pointer-events: none;
 }
 
-.arbin-sidebar-backdrop.active {
-    display: block;
-    opacity: 1;
-    pointer-events: auto;
+/* Backdrop only becomes interactive inside the mobile media query */
+@media screen and (max-width: 768px) {
+    .arbin-sidebar-backdrop.active {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
+    }
 }
 
-/* On desktop, never show the backdrop regardless of state */
+/* On desktop: hard-disable both the backdrop and the hamburger */
 @media screen and (min-width: 769px) {
     .arbin-sidebar-backdrop,
     .arbin-sidebar-backdrop.active {
         display: none !important;
+        pointer-events: none !important;
     }
     .mobile-menu-toggle {
         display: none !important;
+    }
+    .arbin-sidebar {
+        position: relative !important;
+        transform: none !important;
+        left: auto !important;
     }
 }
 
